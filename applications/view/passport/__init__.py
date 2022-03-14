@@ -4,13 +4,57 @@ from flask_login import current_user, login_user, login_required, logout_user
 from applications.common import admin as index_curd
 from applications.common.admin_log import login_log
 from applications.common.utils.http import fail_api, success_api
-from applications.models import User
-
+from applications.models import User, Role
+from applications.extensions import db
 passport_bp = Blueprint('passport', __name__, url_prefix='/passport')
 
 
 def register_passport_views(app):
     app.register_blueprint(passport_bp)
+
+
+#用户注册
+@passport_bp.get('/register')
+def register():
+    return render_template('index/register.html')
+
+@passport_bp.post('/register')
+
+def register_post():
+    req = request.form
+    username = req.get('username')
+    password = req.get('password')
+    role_id=req.get('role')
+    print("检测传入role值")
+    print(role_id)
+    code = req.get('captcha').__str__().lower()
+
+    if not username or not password or not code:
+        return fail_api(msg="用户名或密码没有输入")
+    s_code = session.get("code", None)
+    session["code"] = None
+
+    if not all([code, s_code]):
+        return fail_api(msg="参数错误")
+
+    if code != s_code:
+        return fail_api(msg="验证码错误")
+    #查询数据库避免重复注册
+    user = User.query.filter_by(username=username).first()
+    if user is None:
+        newUser=User(username=username,enable=1)
+        newUser.set_password(password)
+        db.session.add(newUser)
+        roles = Role.query.filter(Role.id.in_([role_id])).all()
+        for r in roles:
+            newUser.role.append(r)
+        db.session.commit()
+        return success_api(msg="注册成功")
+
+
+    else:
+        return fail_api(msg="用户已被注册")
+
 
 
 # 获取验证码
@@ -19,6 +63,9 @@ def get_captcha():
     resp, code = index_curd.get_captcha()
     session["code"] = code
     return resp
+
+
+
 
 
 # 登录
