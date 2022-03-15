@@ -6,3 +6,4 @@ from .admin_dept import DeptOutSchema
 from .admin_log import LogOutSchema
 from .admin_photo import PhotoOutSchema
 from .recruitment import recruitmentOutSchema
+from .resume import resumeOutSchema

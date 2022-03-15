@@ -21,14 +21,14 @@
                     <div class="layui-form-item">
                         <label class="layui-form-label">info</label>
                         <div class="layui-input-block">
-                            <input type="text" value="{{ recruitment_Update.info }}" name="info" lay-verify="title"
+                            <input type="text" value="{{ resume_Update.info }}" name="info" lay-verify="title"
                                    autocomplete="off" placeholder="请输入标题" class="layui-input">
                         </div>
                     </div>
                     <div class="layui-form-item">
                         <label class="layui-form-label">remark</label>
                         <div class="layui-input-block">
-                            <input type="text" value="{{ recruitment_Update.remark }}" name="remark" lay-verify="title"
+                            <input type="text" value="{{ resume_Update.remark }}" name="remark" lay-verify="title"
                                    autocomplete="off" placeholder="请输入标题"
                                    class="layui-input">
                         </div>
@@ -64,7 +64,7 @@
           form.on('submit(user-update)', function (data) {
             
             $.ajax({
-              url: '/recruitment/update',
+              url: '/resume/update',
               data: JSON.stringify(data.field),
               dataType: 'json',
               contentType: 'application/json',
