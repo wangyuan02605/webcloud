@@ -1,20 +1,80 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <title>Title</title>
+    <title>信息增加</title>
+    {% include 'admin/common/header.html' %}
 </head>
 <body>
 
-<form action="/recruitment/add" method="post">
+    <form class="layui-form">
+        <div class="mainBox">
+            <div class="main-container">
+                <div class="main-container">
+                    <div class="layui-form-item">
+                        <label class="layui-form-label">info</label>
+                        <div class="layui-input-block">
+                            <input type="text" name="info" lay-verify="title" autocomplete="off" placeholder="请输入标题"
+                                   class="layui-input">
+                        </div>
+                    </div>
+                    <div class="layui-form-item">
+                        <label class="layui-form-label">remark</label>
+                        <div class="layui-input-block">
+                            <input type="text" name="remark" lay-verify="title" autocomplete="off" placeholder="请输入标题"
+                                   class="layui-input">
+                        </div>
+                    </div>
+                   
+                </div>
+            </div>
+        </div>
+        <div class="bottom">
+            <div class="button-container">
+                <button type="submit" class="pear-btn pear-btn-primary pear-btn-sm" lay-submit="" lay-filter="user-save">
+                    <i class="layui-icon layui-icon-ok"></i>
+                    提交
+                </button>
+                <button type="reset" class="pear-btn pear-btn-sm">
+                    <i class="layui-icon layui-icon-refresh"></i>
+                    重置
+                </button>
+            </div>
+        </div>
+    </form>
+    {% include 'admin/common/footer.html' %}
+<script>
+  layui.use(['form', 'jquery'], function () {
+    let form = layui.form
+    let $ = layui.jquery
+    form.on('submit(user-save)', function (data) {
+      let roleIds = ''
+      $('input[type=checkbox]:checked').each(function () {
+        roleIds += $(this).val() + ','
+      })
+      roleIds = roleIds.substr(0, roleIds.length - 1)
+      data.field.roleIds = roleIds
 
-    info: <input type="text" placeholder="info" name="info">><br/>
-    remark: <input type="text" placeholder="remark" name="remark"><br/>
-
-    <input type="submit"  value="提交">
-
-
-</form>
+      $.ajax({
+        url: '/recruitment/save',
+        data: JSON.stringify(data.field),
+        dataType: 'json',
+        contentType: 'application/json',
+        type: 'post',
+        success: function (result) {
+          if (result.success) {
+            layer.msg(result.msg, { icon: 1, time: 1000 }, function () {
+              parent.layer.close(parent.layer.getFrameIndex(window.name))//关闭当前页
+              parent.layui.table.reload('user-table')
+            })
+          } else {
+            layer.msg(result.msg, { icon: 2, time: 1000 })
+          }
+        }
+      })
+      return false
+    })
+  })
+</script>
 
 
 </body>

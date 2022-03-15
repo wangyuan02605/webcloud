@@ -7,8 +7,10 @@ from applications.common import curd
 from applications.extensions import db
 from applications.common.utils.http import table_api, fail_api, success_api
 recruitment_BP = Blueprint('recruitment', __name__, url_prefix='/recruitment')
-
-
+from applications.common.utils.validate import xss_escape
+from applications.schemas import recruitmentOutSchema
+from applications.common.helper import ModelFilter
+from applications.common.curd import model_to_dicts
 #招聘信息管理
 
 @recruitment_BP.get("/")
@@ -30,23 +32,26 @@ def add():
     #传入id
     return render_template("enterprise/add.html")
 
-@recruitment_BP.post("/add")
-def add_post():
-    print(request.form)
-    info=request.form.get('info', None)
-    remark=request.form.get('remark',None)
+@recruitment_BP.post("/save")
+def save():
+    req_json = request.json
+
+    info = xss_escape(req_json.get('info'))
+    remark = xss_escape(req_json.get('remark'))
+
     user_id=current_user.id
 
     recruitmentNew=Recruitment(info=info,remark=remark,user_id=user_id)
     db.session.add(recruitmentNew)
     db.session.commit()
-    return "post"
+    return success_api(msg="增加成功")
 
 #招聘信息删除
 
-@recruitment_BP.get("/remove/<int:id>")
+@recruitment_BP.delete("/remove/<int:id>")
 
 def remove(id):
+    print("#########访问")
     recruitment_remove = curd.get_one_by_id(Recruitment, id)
 
     if current_user.id ==recruitment_remove.user_id:
@@ -83,14 +88,16 @@ def edit(id):
         return fail_api(msg="信息不一致")
 
 
-#  编辑用户
-@recruitment_BP.post('/update')
-
+#  编辑信息
+@recruitment_BP.put('/update')
 def update():
-    id=request.form.get('id', None)
+    print("EEEEEEEEEEEEEEEEEEEEE")
+    req_json = request.json
+    id =xss_escape(req_json.get("id"))
+    info = xss_escape(req_json.get("info"))
+    remark = xss_escape(req_json.get("remark"))
     # 传入修改的信息
-    info = request.form.get('info', None)
-    remark = request.form.get('remark', None)
+
     recruitment_Update = curd.get_one_by_id(Recruitment, id)
     if current_user.id == recruitment_Update.user_id:
         print("核定一致")
@@ -101,5 +108,29 @@ def update():
     else:
         print("核定不一致")
         return fail_api(msg="信息不一致")
+
+#分页查询
+
+@recruitment_BP.get('/data')
+def data():
+    # 获取请求参数
+    info = xss_escape(request.args.get('info', type=str))
+    remark = xss_escape(request.args.get('remark', type=str))
+    user_id=current_user.id
+    # 查询参数构造
+    mf = ModelFilter()
+    if info:
+        mf.contains(field_name="info", value=info)
+    if remark:
+        mf.contains(field_name="remark", value=remark)
+    if user_id:
+        mf.exact(field_name="user_id", value=user_id)
+    # orm查询
+    # 使用分页获取data需要.items
+    recruitment_ = Recruitment.query.filter(mf.get_filter(model=Recruitment)).layui_paginate()
+    count = recruitment_.total
+    # 返回api
+    return table_api(data=model_to_dicts(schema=recruitmentOutSchema, data=recruitment_.items), count=count)
+
 
 
