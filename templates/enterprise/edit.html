@@ -1,0 +1,16 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+
+<form action="/recruitment/update" method="post">
+    <input type="hidden" name="id" value="{{ recruitment_Update.id }}">
+    info: <input type="text" placeholder="info" name="info" value="{{ recruitment_Update.info }}"><br/>
+    remark: <input type="text" placeholder="remark" name="remark" value="{{ recruitment_Update.info }}" ><br/>
+    <input type="submit"  value="提交">
+</form>
+</body>
+</html>

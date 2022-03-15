@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+<div>{{ recruitment_list }}</div>
+<table border="1xp">
+    {% for foo in recruitment_list %}
+        <tr>
+            <td>{{ foo }}</td>
+            <td>{{ foo.id }}</td>
+            <td>{{ foo.user_id }}</td>
+            <td>{{ foo.info }}</td>
+            <td>{{ foo.remark }}</td>
+        </tr>
+    {% endfor %}
+</table>
+
+</body>
+</html>
