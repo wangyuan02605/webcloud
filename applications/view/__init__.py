@@ -6,7 +6,9 @@ from applications.view.department import register_dept_views
 from applications.view.enterprise import register_recruitment_views
 from applications.view.student import register_resume_views
 from applications.view.manage import register_manage_views
+
 from applications.view.browse import register_browse_views
+
 def init_view(app):
     register_admin_views(app)
     register_index_views(app)
@@ -17,3 +19,4 @@ def init_view(app):
     register_resume_views(app)
     register_manage_views(app)
     register_browse_views(app)
+
