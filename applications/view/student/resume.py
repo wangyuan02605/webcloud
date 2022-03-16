@@ -82,7 +82,6 @@ def edit(id):
     #验证信息为当前用户所属
     if current_user.id==resume_Update.user_id:
         return render_template("student/edit.html",recruitment_Update=resume_Update)
-
     else:
         return fail_api(msg="信息不一致")
 

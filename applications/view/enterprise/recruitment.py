@@ -25,7 +25,6 @@ def index():
     return render_template("enterprise/index.html",recruitment_list=recruitment_list)
 
 #招聘信息发布
-
 @recruitment_BP.get("/add")
 def add():
 
@@ -40,8 +39,8 @@ def save():
     remark = xss_escape(req_json.get('remark'))
 
     user_id=current_user.id
-
-    recruitmentNew=Recruitment(info=info,remark=remark,user_id=user_id)
+    #新信息默认未审核
+    recruitmentNew=Recruitment(info=info,remark=remark,user_id=user_id,status=0)
     db.session.add(recruitmentNew)
     db.session.commit()
     return success_api(msg="增加成功")
@@ -51,7 +50,7 @@ def save():
 @recruitment_BP.delete("/remove/<int:id>")
 
 def remove(id):
-    print("#########访问")
+
     recruitment_remove = curd.get_one_by_id(Recruitment, id)
 
     if current_user.id ==recruitment_remove.user_id:
@@ -91,17 +90,19 @@ def edit(id):
 #  编辑信息
 @recruitment_BP.put('/update')
 def update():
-    print("EEEEEEEEEEEEEEEEEEEEE")
+
     req_json = request.json
     id =xss_escape(req_json.get("id"))
     info = xss_escape(req_json.get("info"))
     remark = xss_escape(req_json.get("remark"))
+    status = xss_escape(req_json.get("status"))
     # 传入修改的信息
 
     recruitment_Update = curd.get_one_by_id(Recruitment, id)
     if current_user.id == recruitment_Update.user_id:
         print("核定一致")
-        Recruitment.query.filter_by(id=id).update({'info': info, 'remark': remark})
+        #修改信息需要审核
+        Recruitment.query.filter_by(id=id).update({'info': info, 'remark': remark,'status':status})
         db.session.commit()
         return success_api(msg="更新成功")
 

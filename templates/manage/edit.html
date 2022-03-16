@@ -34,16 +34,27 @@
                         </div>
                     </div>
                     <div class="layui-form-item">
-                        <label class="layui-form-label">状态</label>
+                        <label class="layui-form-label">result</label>
+                        <div class="layui-input-block">
+                            <input type="text" value="{{ recruitment_Update.result }}" name="remark" lay-verify="title"
+                                   autocomplete="off" placeholder="请输入标题"
+                                   class="layui-input">
+                        </div>
+                    </div>
+                    <div class="layui-form-item">
+                        <label class="layui-form-label">审核</label>
                         <div>
                         <select name="status" >
                                     <option value=""></option>
-                                    <option value="0">初始化</option>
-                                    <option value="1">申请</option>
+                                    <option value="2">驳回</option>
+                                    <option value="3">通过</option>
                                 </select>
-                            </div>
+                        </div>
                     </div>
-
+                    
+    
+    
+                    
                 </div>
             </div>
         </div>
@@ -71,7 +82,7 @@
           form.on('submit(user-update)', function (data) {
             
             $.ajax({
-              url: '/recruitment/update',
+              url: '/manage/update',
               data: JSON.stringify(data.field),
               dataType: 'json',
               contentType: 'application/json',
