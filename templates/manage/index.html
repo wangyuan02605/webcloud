@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <title>招聘信息管理</title>
+    <title>简历信息审核</title>
     {% include 'admin/common/header.html' %}
     <link rel="stylesheet" href="{{ url_for('static', filename='/admin/admin/css/other/user.css') }}"/>
 </head>
@@ -37,23 +37,13 @@
 </div>
 </body>
     {# 表格操作 #}
-    <script type="text/html" id="user-toolbar">
-        <button class="pear-btn pear-btn-primary pear-btn-md" lay-event="add">
-            <i class="pear-icon pear-icon-add"></i>
-            新增
-        </button>
-        
-    </script>
-    {# 信息修改操作 #}
+
+    {# 信息审核操作 #}
     <script type="text/html" id="user-bar">
         <button class="pear-btn pear-btn-primary pear-btn-sm" lay-event="edit"><i class="pear-icon pear-icon-edit"></i>
         </button>
-        <button class="pear-btn pear-btn-danger pear-btn-sm" lay-event="remove"><i
-                class="pear-icon pear-icon-ashbin"></i>
-        </button>
-    </script>
-  
 
+    </script>
 
     {# 信息注册时间 #}
     <script type="text/html" id="user-createTime">
@@ -76,7 +66,7 @@
           let dtree = layui.dtree
           let popup = layui.popup
           let common = layui.common
-          let MODULE_PATH = '/recruitment/'
+          let MODULE_PATH = '/manage/'
       
           // 表格数据
           let cols = [
@@ -86,7 +76,6 @@
          
               { title: 'info', field: 'info', align: 'center', width: 110 },
               { title: 'remark', field: 'remark', align: 'center' },
-             
               {
                 field: 'status', title: 'status',templet:function (d) {
                     if (d.status==0){
@@ -117,7 +106,7 @@
             skin: 'line',
             height: 'full-148',
             toolbar: '#user-toolbar', /*工具栏*/
-            text: { none: '暂无招聘信息' },
+            text: { none: '暂无审核信息' },
             defaultToolbar: [{ layEvent: 'refresh', icon: 'layui-icon-refresh' }, 'filter', 'print', 'exports'] /*默认工具栏*/
           })
       
