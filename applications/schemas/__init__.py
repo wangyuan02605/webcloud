@@ -7,3 +7,4 @@ from .admin_log import LogOutSchema
 from .admin_photo import PhotoOutSchema
 from .recruitment import recruitmentOutSchema
 from .resume import resumeOutSchema
+from .employ import employOutSchema

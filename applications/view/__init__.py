@@ -9,6 +9,8 @@ from applications.view.manage import register_manage_views
 
 from applications.view.browse import register_browse_views
 
+from applications.view.employ import register_employ_views
+
 def init_view(app):
     register_admin_views(app)
     register_index_views(app)
@@ -19,4 +21,5 @@ def init_view(app):
     register_resume_views(app)
     register_manage_views(app)
     register_browse_views(app)
+    register_employ_views(app)
 

@@ -10,7 +10,7 @@ from applications.common.utils.rights import authorize
 from applications.common.utils.validate import xss_escape
 from applications.extensions import db
 
-from applications.models import  AdminLog,Recruitment
+from applications.models import  AdminLog,Recruitment,Employ
 
 from applications.schemas import recruitmentOutSchema
 
@@ -28,6 +28,14 @@ def index():
     print(recruitment_list)
     # 传递至前台
     return render_template("manage/index.html", recruitment_list=recruitment_list)
+
+
+@manage_BP.get('/postresume')
+
+def post_resume():
+    #获得当前用户创建需要审核的雇佣关系
+    pass
+
 
 #招聘信息修改
 @authorize("admin:manage:info")
